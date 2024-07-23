@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Your Own Adventure</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        li {
+            margin: 15px 0;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        li:hover {
+            background-color: #e0f2f1;
+            transform: translateY(-5px);
+            border-radius: 5px;
+        }
+        a {
+            display: block;
+            padding: 15px 20px;
+            background-color: #00796b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #004d40;
+        }
+        .icon {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>{{.Title}}</h1>
+    {{range .Paragraphs}}
+    <p>{{.}}</p>
+    {{end}}
+    <ul>
+        {{range .Options}}
+        <li>
+            <a href="/{{.NextChapter}}">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24"><path d="M720 960 560 800l70-70 90 90V600h100v220l90-90 70 70-160 160ZM150 836v-80h180v80H150Zm0-220v-80h360v80H150Zm0-220v-80h180v80H150Z"/></svg>
+                {{.Text}}
+            </a>
+        </li>
+        {{end}}
+    </ul>
+</div>
+</body>
+</html>
