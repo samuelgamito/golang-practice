@@ -1,6 +1,7 @@
 package htmllp
 
 import (
+	"fmt"
 	"golang.org/x/net/html"
 	"io"
 	"strings"
@@ -37,19 +38,40 @@ func NewHtmlParser(ioReader io.Reader, filter FilterOption) (*HtmlLinkParser, er
 	return parser, nil
 }
 
+func (h HtmlLinkParser) getAllText(aNode *html.Node) string {
+	var f func(*html.Node)
+
+	var text string
+	text = ""
+	f = func(n *html.Node) {
+		fmt.Println(n.Data)
+		if n.Type == html.TextNode {
+			fmt.Println(n.Data)
+			text = text + n.Data
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(c)
+		}
+	}
+
+	f(aNode)
+
+	return text
+}
+
 func (h HtmlLinkParser) ReadANodes() ([]Link, error) {
 
 	var f func(*html.Node)
 
 	var links []Link
+
 	f = func(n *html.Node) {
-		if n.Type == html.ElementNode && n.Data == "a" {
-			if n.Attr != nil {
-				for _, a := range n.Attr {
-					if a.Key == "href" && h.Filter(a.Val) {
-						links = append(links, Link{a.Val, strings.TrimSpace(n.FirstChild.Data)})
-						break
-					}
+		if n.Type == html.ElementNode && n.Data == "a" && n.Attr != nil {
+			for _, a := range n.Attr {
+				if a.Key == "href" && h.Filter(a.Val) {
+					fmt.Println(a.Val)
+					links = append(links, Link{a.Val, strings.TrimSpace(h.getAllText(n))})
+					break
 				}
 			}
 		}
